@@ -305,7 +305,58 @@ let activeTeam=0,teamHistory=[];
 function teamAddMessage(text,who){const box=document.getElementById('teamChatMessages');const d=document.createElement('div');d.className='ai-msg '+who;d.textContent=text;box.appendChild(d);box.scrollTop=box.scrollHeight;}
 function openTeamChat(i){activeTeam=i;teamHistory=[];const p=BCCIT_TEAM[i];document.getElementById('teamChatAvatar').textContent=p.avatar;document.getElementById('teamChatName').textContent=p.name;document.getElementById('teamChatRole').textContent=p.role;document.getElementById('teamChatMessages').innerHTML='';document.getElementById('teamChatStatus').textContent='مساعد '+p.name+' جاهز لاستقبال سؤالك';teamAddMessage(p.welcome,'bot');document.getElementById('teamChatBackdrop').classList.add('open');document.body.style.overflow='hidden';setTimeout(()=>document.getElementById('teamChatInput').focus(),80);}
 function closeTeamChat(){document.getElementById('teamChatBackdrop').classList.remove('open');document.body.style.overflow='';}
-async function sendTeamQuestion(q){const p=BCCIT_TEAM[activeTeam];teamAddMessage(q,'user');teamHistory.push({role:'user',content:q});const send=document.getElementById('teamChatSend'),status=document.getElementById('teamChatStatus');send.disabled=true;status.textContent='بيفكر في إجابة مناسبة...';try{const res=await fetch('/api/team-chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({character:p.name,role:p.role,domain:p.domain,messages:teamHistory.slice(-12)})});if(!res.ok)throw new Error('الخدمة غير مفعلة أو غير متاحة');const data=await res.json();if(!data.reply)throw new Error('لم تصل إجابة من الخادم');teamAddMessage(data.reply,'bot');teamHistory.push({role:'assistant',content:data.reply});status.textContent='متصل — '+p.name+' معاك';}catch(e){teamAddMessage('أقدر أساعدك في مجال '+p.domain+'. لكن خدمة الذكاء الاصطناعي المباشرة لم تُربط بالخادم بعد. شغّل خادم BCCIT المرفق واربط مفتاح الخدمة فيه بشكل آمن، وبعدها هتقدر تسألني بحرية.','bot');status.textContent='وضع المعاينة — الربط بالخادم مطلوب';}finally{send.disabled=false;}}
+async function sendTeamQuestion(q) {
+  const p = BCCIT_TEAM[activeTeam];
+  teamAddMessage(q, 'user');
+  teamHistory.push({ role: 'user', content: q });
+
+  const send = document.getElementById('teamChatSend');
+  const status = document.getElementById('teamChatStatus');
+
+  send.disabled = true;
+  status.textContent = 'بيفكر في إجابة مناسبة...';
+
+  try {
+    const res = await fetch(
+      'https://bccit-ai-team.canaryaaa847.workers.dev/api/team-chat',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          character: p.name,
+          role: p.role,
+          domain: p.domain,
+          messages: teamHistory.slice(-12)
+        })
+      }
+    );
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.error || ('HTTP ' + res.status));
+    }
+
+    if (!data.reply) {
+      throw new Error('لم تصل إجابة من الخادم');
+    }
+
+    teamAddMessage(data.reply, 'bot');
+    teamHistory.push({ role: 'assistant', content: data.reply });
+    status.textContent = 'متصل — ' + p.name + ' معاك';
+
+  } catch (e) {
+    console.error('BCCIT Chat Error:', e);
+    teamAddMessage(
+      'تعذر الاتصال بالمساعد الذكي: ' + e.message,
+      'bot'
+    );
+    status.textContent = 'تعذر الاتصال — حاول مرة أخرى';
+
+  } finally {
+    send.disabled = false;
+  }
+}
 document.getElementById('teamChatForm').addEventListener('submit',e=>{e.preventDefault();const input=document.getElementById('teamChatInput');const q=input.value.trim();if(!q)return;input.value='';sendTeamQuestion(q);});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeTeamChat();});
 function init(){ $('categoryTiles').innerHTML=categories.map((c,i)=>{let p=posters.find(x=>x.category===c);return `<div class="tile" role="button" tabindex="0" aria-label="افتح تخصص ${esc(c)}" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();setCategory('${esc(c)}')}" onclick="setCategory('${esc(c)}')"><div class="emoji">${p.emoji}</div><h3>${esc(c)}</h3><p>${posters.filter(x=>x.category===c).length} بوستر أصلي — اضغط للاستكشاف</p></div>`}).join('');$('filters').innerHTML=['الكل',...categories].map(c=>`<button class="${c==='الكل'?'active':''}" onclick="setCategory('${esc(c)}')">${c==='الكل'?'كل التخصصات':esc(c)}</button>`).join('');renderCatalog()}
