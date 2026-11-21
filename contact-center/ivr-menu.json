@@ -1,0 +1,63 @@
+{
+  "project": "BCCIT AI Contact Center",
+  "version": "0.1.0",
+  "locale": "ar-EG",
+  "timezone": "Africa/Cairo",
+  "mode": "simulation",
+  "greeting": "أهلاً بحضرتك في BCCIT ACADEMY. اختار الخدمة المطلوبة من القائمة التالية، أو انتظر لسماع الخيارات مرة أخرى.",
+  "fallback": "لم يتم التعرف على الاختيار. من فضلك جرّب مرة أخرى.",
+  "timeout": "لم يصلنا اختيار. يمكنك اختيار الخدمة من لوحة الأرقام.",
+  "menu": [
+    {
+      "digit": "1",
+      "id": "languages",
+      "label": "اللغات والترجمة",
+      "description": "الإنجليزية والألمانية والفرنسية واللغات الأخرى"
+    },
+    {
+      "digit": "2",
+      "id": "technology",
+      "label": "التكنولوجيا والكمبيوتر",
+      "description": "ICDL والمهارات الرقمية والبرمجة والذكاء الاصطناعي"
+    },
+    {
+      "digit": "3",
+      "id": "business",
+      "label": "المحاسبة وإدارة الأعمال",
+      "description": "المحاسبة والإدارة والتسويق وريادة الأعمال"
+    },
+    {
+      "digit": "4",
+      "id": "development",
+      "label": "التنمية البشرية والتدريب المهني",
+      "description": "مهارات التعلم والتطوير الشخصي والتأهيل المهني"
+    },
+    {
+      "digit": "5",
+      "id": "registration",
+      "label": "الأسعار والعروض والتسجيل",
+      "description": "الاستفسار عن البرامج وطلبات الالتحاق"
+    },
+    {
+      "digit": "6",
+      "id": "branches",
+      "label": "الفروع ومواعيد العمل",
+      "description": "معلومات الفروع ومواعيد استقبال العملاء"
+    }
+  ],
+  "escalation": {
+    "enabled": true,
+    "policy": "human-required-only",
+    "reasons": [
+      "شكوى أو نزاع مالي",
+      "طلب استرداد أو استثناء",
+      "تعذر التحقق من معلومة رسمية",
+      "طلب صريح للتحدث إلى موظف"
+    ]
+  },
+  "privacy": {
+    "recording": "disabled-by-default",
+    "announceBeforeRecording": true,
+    "collectMinimumData": true
+  }
+}
