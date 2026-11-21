@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BCCIT AI Contact Center — IVR Simulation</title>
+<style>
+:root{color-scheme:dark;--bg:#071326;--panel:#102440;--line:#254466;--blue:#2674d9;--gold:#e7bd65;--muted:#a9bad0;--white:#f4f7fb}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% 0,#17365e 0,#071326 55%);color:var(--white);font-family:Tahoma,Arial,sans-serif;min-height:100vh;padding:28px 16px}
+.wrap{max-width:980px;margin:auto}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:22px}.brand{font-weight:800;letter-spacing:.4px}.tag{border:1px solid #8b713e;color:#f1d18c;border-radius:99px;padding:7px 12px;font-size:12px}
+h1{font-size:clamp(25px,4vw,38px);margin:8px 0}.sub{color:var(--muted);line-height:1.8;margin:0 0 22px}
+.layout{display:grid;grid-template-columns:1.1fr .9fr;gap:18px}.panel{background:linear-gradient(150deg,#112846,#0b1c32);border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:0 18px 55px #0005}
+.screen{background:#06101f;border:1px solid #203d5d;border-radius:14px;padding:18px;min-height:142px;margin-bottom:16px}.screen small{color:var(--gold)}.screen p{font-size:17px;line-height:1.9;margin:9px 0 0}.options{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.option{display:flex;align-items:center;gap:12px;text-align:right;background:#132d4c;border:1px solid #294b70;border-radius:12px;padding:13px;color:var(--white);cursor:pointer;min-height:66px}.option:hover,.key:hover{border-color:var(--gold);background:#1a3b62}.num{display:grid;place-items:center;width:34px;height:34px;flex:0 0 34px;border-radius:10px;background:#245b9e;color:white;font-weight:bold}.option b{display:block;font-size:14px}.option span:last-child{font-size:11px;color:var(--muted);line-height:1.5}
+.keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:10px}.key{background:#102846;border:1px solid #2b4b6c;color:white;border-radius:12px;min-height:56px;font-size:21px;cursor:pointer}.key small{display:block;color:var(--muted);font-size:9px;margin-top:3px}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}.action{border:1px solid #365879;background:#18385d;color:white;padding:10px 14px;border-radius:10px;cursor:pointer}.action.primary{background:var(--blue);border-color:var(--blue)}.status{color:var(--muted);font-size:12px;line-height:1.8;margin-top:14px}
+.log{min-height:170px;max-height:290px;overflow:auto;display:flex;flex-direction:column;gap:9px}.entry{background:#0a1a2e;border:1px solid #203c5b;border-radius:10px;padding:10px 12px;font-size:13px;line-height:1.7}.entry em{color:var(--gold);font-style:normal}.foot{color:#8298b3;font-size:11px;margin-top:20px;line-height:1.8}
+@media(max-width:760px){.layout{grid-template-columns:1fr}.options{grid-template-columns:1fr}.panel{padding:16px}}
+</style></head>
+<body><main class="wrap">
+<div class="top"><div class="brand">✦ BCCIT ACADEMY</div><div class="tag">وضع المحاكاة — لا توجد مكالمات حقيقية</div></div>
+<h1>مركز الاتصالات الذكي</h1><p class="sub">اختبر قائمة استقبال المكالمات قبل ربط أي رقم هاتف. اختر رقمًا من لوحة المفاتيح أو اضغط على الخدمة مباشرة.</p>
+<div class="layout">
+<section class="panel">
+ <div class="screen" aria-live="polite"><small id="screenLabel">رسالة الترحيب</small><p id="screenText">أهلاً بحضرتك في BCCIT ACADEMY. اختار الخدمة المطلوبة من القائمة التالية.</p></div>
+ <div class="options" id="options"></div>
+ <div class="keypad" aria-label="لوحة أرقام الهاتف">
+  <button class="key" data-key="1">1</button><button class="key" data-key="2">2</button><button class="key" data-key="3">3</button>
+  <button class="key" data-key="4">4</button><button class="key" data-key="5">5</button><button class="key" data-key="6">6</button>
+  <button class="key" data-key="7">7</button><button class="key" data-key="8">8</button><button class="key" data-key="9">9</button>
+  <button class="key" data-key="*">*</button><button class="key" data-key="0">0</button><button class="key" data-key="#">#</button>
+ </div>
+ <div class="actions"><button class="action primary" id="repeat">إعادة القائمة</button><button class="action" id="home">القائمة الرئيسية</button><button class="action" id="clear">مسح سجل التجربة</button></div>
+ <div class="status" id="status">الحالة: في انتظار اختيار العميل.</div>
+</section>
+<aside class="panel"><h2 style="font-size:19px;margin-top:0">سجل تجربة المكالمة</h2><div class="log" id="log"><div class="entry">بدأت محاكاة استقبال مكالمة تجريبية.</div></div><p class="foot">هذه الصفحة تختبر منطق القائمة فقط. لا تتصل بالهاتف أو Groq أو أي خدمة خارجية، ولا تسجل صوتًا أو بيانات عملاء.</p></aside>
+</div><p class="foot">BCCIT AI Contact Center · Foundation v0.1.0</p>
+</main>
+<script>
+const menu=[
+{n:"1",id:"languages",title:"اللغات والترجمة",desc:"الإنجليزية والألمانية والفرنسية واللغات الأخرى",reply:"حضرتك اخترت قسم اللغات والترجمة. في النظام الفعلي سيبدأ المساعد الذكي بسؤال حضرتك عن اللغة والمستوى والهدف من التعلم."},
+{n:"2",id:"technology",title:"التكنولوجيا والكمبيوتر",desc:"ICDL والمهارات الرقمية والبرمجة والذكاء الاصطناعي",reply:"حضرتك اخترت قسم التكنولوجيا والكمبيوتر. سيحدد المساعد المجال ومستوى الخبرة والبرنامج المطلوب."},
+{n:"3",id:"business",title:"المحاسبة وإدارة الأعمال",desc:"المحاسبة والإدارة والتسويق وريادة الأعمال",reply:"حضرتك اخترت قسم المحاسبة وإدارة الأعمال. سيحدد المساعد التخصص واحتياج حضرتك."},
+{n:"4",id:"development",title:"التنمية البشرية والتدريب المهني",desc:"مهارات التعلم والتطوير الشخصي والتأهيل المهني",reply:"حضرتك اخترت التنمية البشرية والتدريب المهني. سيبدأ المساعد بفهم هدفك التدريبي."},
+{n:"5",id:"registration",title:"الأسعار والعروض والتسجيل",desc:"الاستفسار عن البرامج وطلبات الالتحاق",reply:"حضرتك اخترت الأسعار والعروض والتسجيل. سيجيب النظام من قاعدة الأسعار الرسمية المحدثة فقط."},
+{n:"6",id:"branches",title:"الفروع ومواعيد العمل",desc:"معلومات الفروع ومواعيد استقبال العملاء",reply:"حضرتك اخترت الفروع ومواعيد العمل. سيحدد المساعد الفرع المطلوب ويعرض المعلومات المعتمدة."}
+];
+const $=id=>document.getElementById(id);const log=$("log");
+function addLog(label,detail){const d=document.createElement("div");d.className="entry";const e=document.createElement("em");e.textContent=label+" ";d.append(e,document.createTextNode(detail));log.append(d);log.scrollTop=log.scrollHeight}
+function showMenu(){ $("screenLabel").textContent="القائمة الرئيسية";$("screenText").textContent="أهلاً بحضرتك في BCCIT ACADEMY. اختار الخدمة المطلوبة، أو اضغط إعادة القائمة."; $("status").textContent="الحالة: في انتظار اختيار العميل.";render()}
+function render(){const root=$("options");root.replaceChildren();menu.forEach(item=>{const b=document.createElement("button");b.className="option";const n=document.createElement("span");n.className="num";n.textContent=item.n;const wrap=document.createElement("span");const title=document.createElement("b");title.textContent=item.title;const desc=document.createElement("span");desc.textContent=item.desc;wrap.append(title,desc);b.append(n,wrap);b.addEventListener("click",()=>choose(item.n));root.append(b)})}
+function choose(key){const item=menu.find(x=>x.n===key);if(!item){$("screenLabel").textContent="اختيار غير صحيح";$("screenText").textContent="عذرًا، الاختيار غير متاح في هذه القائمة. من فضلك اختار رقمًا من 1 إلى 6."; $("status").textContent="الحالة: اختيار غير صالح — يمكن إعادة المحاولة.";addLog("اختيار غير صالح:",key);return}
+$("screenLabel").textContent="تم اختيار: "+item.title;$("screenText").textContent=item.reply;$("status").textContent="الحالة: تم توجيه المحاكاة إلى "+item.title;addLog("اختيار "+key+" —",item.title);addLog("استجابة النظام:",item.reply)}
+document.querySelectorAll("[data-key]").forEach(b=>b.addEventListener("click",()=>choose(b.dataset.key)));
+$("repeat").addEventListener("click",()=>{showMenu();addLog("النظام:","إعادة تشغيل القائمة الرئيسية.")});
+$("home").addEventListener("click",()=>{showMenu();addLog("النظام:","العودة إلى القائمة الرئيسية.")});
+$("clear").addEventListener("click",()=>{log.replaceChildren();addLog("النظام:","تم مسح سجل المحاكاة فقط.")});
+render();
+</script></body></html>
